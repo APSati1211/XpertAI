@@ -3,5 +3,6 @@ from .models import ContactMessage
 
 @admin.register(ContactMessage)
 class ContactAdmin(admin.ModelAdmin):
-    list_display = ("name", "email", "created_at")
-    search_fields = ("name", "email")
+    # FIX: Added 'message' to list_display
+    list_display = ("name", "email", "message", "created_at")
+    search_fields = ("name", "email", "message")

@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 from decouple import config # <-- NEW: Import config
+import datetime # <-- NEW: Using standard library for time logic
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -19,7 +20,13 @@ DEBUG = config("DEBUG", default=False, cast=bool)
 # --- OPENAI API KEY (ADDED HERE) ---
 OPENAI_API_KEY = config("OPENAI_API_KEY", default=None) 
 
-ALLOWED_HOSTS = ["*"]  # allow all for development
+# --- ALLOWED HOSTS (UPDATED FOR PRODUCTION/VERCEL) ---
+ALLOWED_HOSTS = [
+    'your-production-backend.com',    # <-- REPLACE: Tumhare live Django server ka domain
+    '127.0.0.1',
+    'localhost',
+    '.vercel.app',                   # <-- ALLOWS: Vercel frontend access (e.g., xpertai-global.vercel.app)
+]
 
 # -----------------------------
 # INSTALLED APPS
@@ -83,6 +90,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                # --- NEW: Profile Image Context Processor Registration ---
+                "backend.context_processors.user_avatar_context", 
             ],
         },
     },
@@ -116,7 +125,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # INTERNATIONALIZATION
 # -----------------------------
 LANGUAGE_CODE = "en-us"
-TIME_ZONE = "UTC"
+TIME_ZONE = "UTC" # <-- Keep as UTC for standard practice
 USE_I18N = True
 USE_TZ = True
 
@@ -151,6 +160,42 @@ CORS_ALLOW_CREDENTIALS = True
 # DEFAULT PRIMARY KEY
 # -----------------------------
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# ==========================================
+#  DYNAMIC THEME LOGIC (6 AM - 6 PM IST)
+#  (Uses standard datetime to avoid 'pytz' error)
+# ==========================================
+
+# 1. Calculate current time adjusted to IST (UTC + 5:30)
+IST_OFFSET = datetime.timedelta(hours=5, minutes=30)
+now_utc = datetime.datetime.utcnow()
+now_ist = now_utc + IST_OFFSET
+
+# 2. Determine if it is day time (6 AM to 6 PM IST)
+# Note: Hours are compared in 24-hour format (6=6AM, 18=6PM)
+is_daytime = 6 <= now_ist.hour < 18
+
+if is_daytime:
+    # --- LIGHT MODE CONFIGURATION (6 AM - 6 PM IST) ---
+    DYNAMIC_THEME_TWEAKS = {
+        "theme": "lux",                     
+        "dark_mode_theme": None,            
+        "brand_colour": "navbar-light",     
+        "navbar": "navbar-white",           
+        "sidebar": "sidebar-light-primary", 
+        "accent": "accent-info",            
+    }
+else:
+    # --- DARK MODE CONFIGURATION (6 PM - 6 AM IST) ---
+    DYNAMIC_THEME_TWEAKS = {
+        "theme": "darkly",                  
+        "dark_mode_theme": None,            
+        "brand_colour": "navbar-dark",      
+        "navbar": "navbar-dark",            
+        "sidebar": "sidebar-dark-indigo",   
+        "accent": "accent-warning",         
+    }
 
 
 # ==========================================
@@ -205,6 +250,10 @@ JAZZMIN_SETTINGS = {
     "related_modal_active": True,
     "use_google_fonts_cdn": True,
     "show_ui_builder": True,
+    
+    # --- USER AVATAR CONFIGURATION ---
+    # Jazzmin ko batana ki context se 'user_avatar' variable uthana hai
+    "user_avatar": "user_avatar", 
 }
 
 JAZZMIN_UI_TWEAKS = {
@@ -212,15 +261,13 @@ JAZZMIN_UI_TWEAKS = {
     "footer_small_text": False,
     "body_small_text": False,
     "brand_small_text": False,
-    "brand_colour": "navbar-primary",
-    "accent": "accent-primary",
-    "navbar": "navbar-dark",
+    
     "no_navbar_border": False,
     "navbar_fixed": True,
     "layout_boxed": False,
     "footer_fixed": False,
     "sidebar_fixed": True,
-    "sidebar": "sidebar-dark-primary",
+    
     "sidebar_nav_small_text": False,
     "sidebar_disable_expand": False,
     "sidebar_nav_child_indent": False,
@@ -228,10 +275,6 @@ JAZZMIN_UI_TWEAKS = {
     "sidebar_nav_legacy_style": False,
     "sidebar_nav_flat_style": True,
     
-    # --- THEME SETTINGS ---
-    "theme": "flatly", 
-     "dark_mode_theme": "darkly", # <--- Commented this to prevent auto dark mode
-
     "button_classes": {
         "primary": "btn-primary",
         "secondary": "btn-secondary",
@@ -239,5 +282,7 @@ JAZZMIN_UI_TWEAKS = {
         "warning": "btn-warning",
         "danger": "btn-danger",
         "success": "btn-success"
-    }
+    },
+    # OVERWRITE BASE TWEAKS WITH DYNAMIC THEME SETTINGS
+    **DYNAMIC_THEME_TWEAKS
 }

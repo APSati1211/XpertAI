@@ -208,14 +208,21 @@ PAGE_SECTIONS = {
     "contact": [
         {"section": "contact_header", "label": "Hero • Title", "field": "title"},
         {"section": "contact_subtext", "label": "Hero • Subtitle", "field": "content"},
+        
+        # --- FORM PRESENTATION CONTROLS (Task 1) ---
         {"section": "form_title", "label": "Form • Title", "field": "title"},
+        {"section": "form_subtext", "label": "Form • Helper Text", "field": "content"},
+        {"section": "form_button_text", "label": "Form • Button Label", "field": "title"},
+        {"section": "form_success_msg", "label": "Form • Success Message", "field": "content"},
+        
+        # Info Panel
         {"section": "info_title", "label": "Info Panel • Title", "field": "title"},
         {"section": "info_text", "label": "Info Panel • Description", "field": "content"},
         {"section": "address", "label": "Info Panel • Address", "field": "content"},
         {"section": "email", "label": "Info Panel • Email", "field": "content"},
         {"section": "phone", "label": "Info Panel • Phone", "field": "content"},
-        {"section": "map_link", "label": "Info Panel • Map Link", "field": "content"},
-        {"section": "map_button", "label": "Info Panel • Map Button Label", "field": "title"},
+        {"section": "map_link", "label": "Info Panel • Map Embed URL", "field": "content"},
+        {"section": "map_button", "label": "Info Panel • Map Button", "field": "title"},
         {"section": "cta_title", "label": "CTA • Title", "field": "title"},
         {"section": "cta_button", "label": "CTA • Button Text", "field": "content"},
     ],
@@ -269,11 +276,27 @@ PAGE_SECTIONS = {
         *_job_sections(3),
         {"section": "form_title", "label": "Form • Title", "field": "title"},
         {"section": "form_subtext", "label": "Form • Description", "field": "content"},
+        {"section": "form_button_text", "label": "Form • Button Label", "field": "title"}, # <-- Task 1: ADDED
+        {"section": "form_success_msg", "label": "Form • Success Message", "field": "content"}, # <-- Task 1: ADDED
     ],
     "blog": [
         {"section": "hero_title", "label": "Hero • Title", "field": "title"},
         {"section": "hero_text", "label": "Hero • Subtitle", "field": "content"},
     ],
+    # <--- Task 3: NEW: FOOTER SECTION
+    "footer": [
+        {"section": "copyright_text", "label": "Copyright • Text", "field": "content"},
+        {"section": "social_links_title", "label": "Socials • Title", "field": "title"},
+        {"section": "facebook_url", "label": "Socials • Facebook URL", "field": "content"},
+        {"section": "linkedin_url", "label": "Socials • LinkedIn URL", "field": "content"},
+        {"section": "twitter_url", "label": "Socials • X (Twitter) URL", "field": "content"},
+        {"section": "instagram_url", "label": "Socials • Instagram URL", "field": "content"},
+        {"section": "contact_column_title", "label": "Contact Column • Title", "field": "title"},
+        {"section": "contact_email", "label": "Contact Column • Email", "field": "content"},
+        {"section": "contact_phone", "label": "Contact Column • Phone", "field": "content"},
+        {"section": "links_column_title", "label": "Links Column • Title", "field": "title"},
+    ]
+    # NEW: FOOTER SECTION --->
 }
 
 
@@ -289,4 +312,3 @@ def get_help_text():
         sections = ", ".join(entry["section"] for entry in entries)
         lines.append(f"{page.capitalize()}: {sections}")
     return "Available sections per page → " + " | ".join(lines)
-

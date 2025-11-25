@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.text import slugify
-from django.core.validators import FileExtensionValidator  # <--- IMPORT ADDED
+from django.core.validators import FileExtensionValidator 
 
 from .sections import get_section_slugs, get_help_text
 
@@ -18,6 +18,7 @@ class SiteContent(models.Model):
         ("careers", "Careers"),
         ("contact", "Contact"),
         ("portfolio", "Portfolio"),
+        ("footer", "Footer"),   
     ]
 
     page = models.CharField(max_length=50, choices=PAGE_CHOICES)
@@ -38,7 +39,9 @@ class SiteContent(models.Model):
         ordering = ["content_order"]
 
     def __str__(self):
-        return f"{self.page} - {self.section}"
+        # FIX for empty log entries: Prioritize Title, then Section Name, then the raw slug.
+        name = self.title or self.section_name or self.section
+        return f"{self.page.upper()} | {name}"
 
     def clean(self):
         super().clean()
@@ -146,6 +149,13 @@ class ResourcesContent(SiteContent):
         verbose_name = "Page: Resources"
         verbose_name_plural = "Page: Resources Content"
 
+# <--- Task 3: NEW: Footer Content Proxy Model
+class FooterContent(SiteContent):
+    class Meta:
+        proxy = True
+        verbose_name = "Page: Footer"
+        verbose_name_plural = "Page: Footer Content"
+# NEW: Footer Content Proxy Model --->
 
 class Service(models.Model):
     title = models.CharField(max_length=200, help_text="e.g. Virtual CFO")

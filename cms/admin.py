@@ -4,7 +4,8 @@ from .models import (
     SiteContent, Page,
     HomeContent, AboutContent, ServicesContent,
     ContactContent, CareersContent, ResourcesContent,
-    CaseStudy, Resource, Service
+    CaseStudy, Resource, Service,
+    FooterContent # <--- Task 3: FooterContent Imported
 )
 
 # 1. Page Admin
@@ -30,24 +31,27 @@ class BaseContentAdmin(SortableAdminMixin, admin.ModelAdmin):
     ordering = ('content_order',)
     save_on_top = True
     
-    readonly_fields = ('page', 'section', 'updated_at')
+    # FIX: section_name ko read-only banaya gaya hai.
+    readonly_fields = ('page', 'section_name', 'section', 'updated_at')
 
     fieldsets = (
         ('Section Info', {
-            'fields': ('section_name', 'title', 'image'),
-            'description': 'Main heading and image for this section.'
+            # FIX: section_name ko yahan se hata diya gaya hai.
+            'fields': ('title', 'image'),
+            'description': 'Main content title and image for this section.'
         }),
         ('Content', {
             'fields': ('content',),
             'description': 'Main text content. HTML is allowed.'
         }),
-        ('System Data', {
-            'fields': ('page', 'section', 'updated_at'),
+        ('System Data (Do Not Edit)', {
+            # FIX: section_name ko yahan read-only dikhaya jayega.
+            'fields': ('page', 'section_name', 'section', 'updated_at'),
             'classes': ('collapse',),
         }),
     )
 
-# 3. Specific Page Admins
+# 3. Specific Page Admins (Inhein change karne ki zaroorat nahi, Base Admin inherit ho raha hai)
 @admin.register(HomeContent)
 class HomeContentAdmin(BaseContentAdmin):
     def get_queryset(self, request):
@@ -102,9 +106,22 @@ class ResourcesContentAdmin(BaseContentAdmin):
         obj.page = 'resources'
         super().save_model(request, obj, form, change)
 
+# <--- Task 3: NEW: Footer Content Admin Registration
+@admin.register(FooterContent)
+class FooterContentAdmin(BaseContentAdmin):
+    def get_queryset(self, request):
+        return super().get_queryset(request).filter(page='footer').order_by('section_name') 
+
+    def save_model(self, request, obj, form, change):
+        obj.page = 'footer' # Ensure all saves go to the 'footer' page
+        super().save_model(request, obj, form, change)
+# NEW: Footer Content Admin Registration --->
+
 # 4. Master Admin (Backup)
 @admin.register(SiteContent)
 class SiteContentAdmin(BaseContentAdmin):
+    # Master Admin par hum section_name ko editable rakh sakte hain, but Proxy Admin par nahi.
+    # Lekin simpler rahe isliye yahan bhi read-only rakhenge.
     list_display = ('page', 'section_name', 'title', 'updated_at')
     list_filter = ('page',)
     readonly_fields = ('section', 'updated_at') 

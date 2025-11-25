@@ -9,6 +9,7 @@ class JobOpeningAdmin(admin.ModelAdmin):
 
 @admin.register(JobApplication)
 class JobApplicationAdmin(admin.ModelAdmin):
-    list_display = ('applicant_name', 'email', 'job', 'applied_at')
+    # UPDATED list_display: resume_link and cover_letter added
+    list_display = ('applicant_name', 'email', 'job', 'applied_at', 'resume_link', 'cover_letter')
     list_filter = ('job',)
-    search_fields = ('applicant_name', 'email')
+    search_fields = ('applicant_name', 'email', 'cover_letter', 'resume_link', 'job__title')
