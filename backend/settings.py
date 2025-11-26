@@ -21,12 +21,7 @@ DEBUG = config("DEBUG", default=False, cast=bool)
 OPENAI_API_KEY = config("OPENAI_API_KEY", default=None) 
 
 # --- ALLOWED HOSTS (UPDATED FOR PRODUCTION/VERCEL) ---
-ALLOWED_HOSTS = [
-    'your-production-backend.com',    # <-- REPLACE: Tumhare live Django server ka domain
-    '127.0.0.1',
-    'localhost',
-    '.vercel.app',                   # <-- ALLOWS: Vercel frontend access (e.g., xpertai-global.vercel.app)
-]
+ALLOWED_HOSTS = ["*"]
 
 # -----------------------------
 # INSTALLED APPS
