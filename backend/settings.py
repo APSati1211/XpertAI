@@ -61,6 +61,8 @@ INSTALLED_APPS = [
     'homepage',
     'resources_page',
     'lead_system_page',
+    'legal',  # <--- NEW APP
+    'services_page', # <--- NEW APP
 ]
 
 # -----------------------------

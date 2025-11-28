@@ -67,6 +67,8 @@ urlpatterns = [
     path("api/", include("homepage.urls")),       # Home Page Data
     path("api/", include("resources_page.urls")), # Resources Page Data
     path("api/", include("lead_system_page.urls")), # Lead System Page Data
+    path("api/legal/", include("legal.urls")), # <--- NEW URL
+     path("api/", include("services_page.urls")), # Services Page Data
 ]
 
 if settings.DEBUG:
