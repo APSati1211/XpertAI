@@ -240,8 +240,14 @@ PAGE_SECTIONS = {
 
     # --- BLOG PAGE ---
     "blog": [
+        # Hero Section
         {"section": "hero_title", "label": "Hero • Title", "field": "title"},
         {"section": "hero_text", "label": "Hero • Subtitle", "field": "content"},
+        
+        # Sidebar & Grid Section Labels
+        {"section": "category_title", "label": "Sidebar • Filter Title", "field": "title"},
+        {"section": "search_placeholder", "label": "Sidebar • Search Header", "field": "title"},
+        {"section": "latest_posts_title", "label": "Main Area • Posts Title", "field": "title"},
     ],
 
     # --- FOOTER SECTION ---
@@ -256,6 +262,23 @@ PAGE_SECTIONS = {
         {"section": "contact_email", "label": "Contact Column • Email", "field": "content"},
         {"section": "contact_phone", "label": "Contact Column • Phone", "field": "content"},
         {"section": "links_column_title", "label": "Links Column • Title", "field": "title"},
+    ],
+
+    # --- LEAD SYSTEM PAGE (UPDATED) ---
+    "lead_system": [
+        {"section": "hero_title", "label": "Hero • Title", "field": "title"},
+        {"section": "hero_text", "label": "Hero • Subtitle", "field": "content"},
+
+        # --- NEW: DASHBOARD PREVIEW SECTION ---
+        {"section": "dashboard_image", "label": "Dashboard • Image (Optional)", "field": "image"},
+        {"section": "dashboard_text", "label": "Dashboard • Placeholder Text", "field": "content"},
+        
+        # New Feature Cards for Lead System
+        *_card_sections("ls_feature", 3, "Feature"),
+        
+        {"section": "cta_title", "label": "CTA • Title", "field": "title"},
+        {"section": "cta_text", "label": "CTA • Description", "field": "content"},
+        {"section": "cta_button", "label": "CTA • Button Text", "field": "title"},
     ]
 }
 

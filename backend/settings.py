@@ -56,6 +56,10 @@ INSTALLED_APPS = [
     "theme",
     "pages",
     "careers",
+    'stakeholders',
+    'homepage',
+    'resources_page',
+    'lead_system_page',
 ]
 
 # -----------------------------
@@ -66,6 +70,8 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    # --- NEW: Auto Theme Middleware ---
+    "backend.middleware.AutomaticThemeMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
